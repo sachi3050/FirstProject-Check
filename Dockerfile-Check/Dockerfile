@@ -2,10 +2,10 @@
 FROM centos:latest
 
 # Maintainer information
-MAINTAINER snsbr2004@gmail.com
+LABEL maintainer="snsbr2004@gmail.com"
 
 # Install necessary package: httpd (Apache)
-RUN yum install -y httpd
+RUN yum -y update && yum install -y httpd
 
 # Download content from the new URL
 ADD https://www.chess.com/play /var/www/html/
