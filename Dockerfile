@@ -1,21 +1,12 @@
-# Base image: CentOS
-FROM centos:latest
+FROM centos:stream8
 
-# Maintainer information
-MAINTAINER snsbr2004@gmail.com
+# Update the repositories to use the baseurl instead of mirrorlist
+RUN sed -i 's|^mirrorlist=|#mirrorlist=|' /etc/yum.repos.d/CentOS-*.repo && \
+    sed -i 's|^#baseurl=http://mirror.centos.org|baseurl=http://mirror.stream.centos.org/8-stream/BaseOS/x86_64/os/|' /etc/yum.repos.d/CentOS-Base.repo && \
+    sed -i 's|^#baseurl=http://mirror.centos.org|baseurl=http://mirror.stream.centos.org/8-stream/AppStream/x86_64/os/|' /etc/yum.repos.d/CentOS-AppStream.repo && \
+    yum clean all && \
+    yum makecache && \
+    yum install -y httpd
 
-# Install necessary package: httpd (Apache)
-RUN yum install -y httpd
-
-# Download content from the new URL
-ADD https://www.chess.com/play /var/www/html/
-
-# Set the working directory to the web server's root directory
-WORKDIR /var/www/html/
-
-# Start Apache in the foreground so that the container keeps running
+# Start the Apache server
 CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
-
-# Expose port 80 for HTTP traffic
-EXPOSE 80
-
