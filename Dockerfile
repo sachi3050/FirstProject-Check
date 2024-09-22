@@ -1,4 +1,4 @@
-FROM centos:stream
+FROM quay.io/centos/centos:stream8
 
 # Update the repositories to use baseurl
 RUN sed -i 's|^mirrorlist=|#mirrorlist=|' /etc/yum.repos.d/CentOS-*.repo && \
